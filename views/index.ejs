@@ -1,0 +1,69 @@
+<%- include("header.ejs") %>
+
+    <!-- Loader shown while images load -->
+    <div id="spinner" class="spinner">
+        <div class="spinner-dot"></div>
+    </div>
+
+    <form action="/" method="post">
+        <label for="type">Select Girls type</label>
+        <select name="type" id="type">
+            <option value="random" <%=type==='random' ? 'selected' : '' %>>random</option>
+            <option value="catgirl" <%=type==='catgirl' ? 'selected' : '' %>>catgirl</option>
+            <option value="foxgirl" <%=type==='foxgirl' ? 'selected' : '' %>>foxgirl</option>
+            <option value="wolfgirl" <%=type==='wolfgirl' ? 'selected' : '' %>>wolfgirl</option>
+            <option value="uniform" <%=type==='uniform' ? 'selected' : '' %>>uniform</option>
+            <option value="tail" <%=type==='tail' ? 'selected' : '' %>>tail</option>
+            <option value="wink" <%=type==='wink' ? 'selected' : '' %>>wink</option>
+            <option value="lying-down" <%=type==='lying-down' ? 'selected' : '' %>>lying-down</option>
+            <option value="w-sitting" <%=type==='w-sitting' ? 'selected' : '' %>>w-sitting</option>
+            <option value="girl" <%=type==='girl' ? 'selected' : '' %>>girl</option>
+            <option value="maid" <%=type==='maid' ? 'selected' : '' %>>maid</option>
+            <option value="heterochromia" <%=type==='heterochromia' ? 'selected' : '' %>>heterochromia</option>
+        </select>
+        <input type="submit" value="Find">
+    </form>
+    <div class="main_container">
+        <% imgURL.forEach(imgs=> {%>
+            <div class="img">
+                <a href="<%= imgs %>" target="_blank">
+                    <img class="image" src="<%= imgs %>" alt="cutegirl" height="400px" loading="lazy" />
+                </a>
+            </div>
+            <%}); %>
+    </div>
+    <div class="refresh">
+    <a href="/?type=<%= type %>">i want more</a>
+    </div>
+
+        <script>
+            (function() {
+                const spinner = document.getElementById('spinner');
+                const images = Array.from(document.querySelectorAll('.image'));
+
+                const hideSpinner = () => {
+                    if (spinner) spinner.style.display = 'none';
+                };
+
+                if (!images.length) {
+                    hideSpinner();
+                    return;
+                }
+
+                const loadPromises = images.map((img) => {
+                    if (img.complete && img.naturalWidth > 0) {
+                        return Promise.resolve();
+                    }
+                    return new Promise((resolve) => {
+                        img.addEventListener('load', resolve, { once: true });
+                        img.addEventListener('error', resolve, { once: true });
+                    });
+                });
+
+                Promise.all(loadPromises).then(hideSpinner).catch(hideSpinner);
+
+                // Fallback in case of very slow or stalled requests
+                setTimeout(hideSpinner, 12000);
+            })();
+        </script>
+    <%- include("footer.ejs") %>

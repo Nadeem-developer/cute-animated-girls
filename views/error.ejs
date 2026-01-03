@@ -1,0 +1,9 @@
+<%- include("header.ejs") %>
+<div class="errro_contaner">
+<h2><%= status %></h2>
+<p class="error_M"><%= message %></p>
+<% if(status >=400 && status < 500){%>
+<a href="/">GO home</a>
+<% } %>
+</div>
+<%- include("footer.ejs") %>
